@@ -8,7 +8,12 @@ export default {
     extend: {
       backgroundImage: {
         'bonfire': "url('public/bonfire.svg')",
-        'banner-img': "url('public/banner_img.jpg')"
+        'banner-img': "url('public/banner_img.jpg')",
+        'search': "url('public/search.svg')"
+      },
+      fontFamily: {
+        mainFont: ['"Protest Strike"', "sans-serif"],
+        secondFont: ['"Protest Riot"', "sans-serif"]
       }
     },
   },

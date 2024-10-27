@@ -1,12 +1,9 @@
-
-// import reactLogo from './assets/react.svg'
-import './App.css'
 import Home  from './pages/Home.jsx';
 
 function App() {
 
   return (
-    <div className="max-w-3xl mx-auto bg-green-400 rounded-xl">
+    <div className="md:bg-green-100 h-full md:p-2">
         <Home />
     </div>
   )

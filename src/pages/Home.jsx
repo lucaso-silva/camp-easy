@@ -1,18 +1,24 @@
 import Logo from '../components/Logo.jsx'
 import Button from '../components/Button.jsx';
 import TripInfoCard from "../components/TripInfoCard.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Home(props) {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/form');
+    }
 
     return(
         <div className="max-w-3xl mx-auto bg-green-400 dark:bg-green-900 md:rounded-xl md:border-2 border-black">
             <header className="flex justify-between items-center p-5">
                 <Logo />
                 <div className="hidden md:block">
-                   <Button label={'New camping'}/>
+                   <Button label={'New camping'} onClick={handleClick} id="new-camping" />
                 </div>
                 <div className="flex justify-around items-center gap-x-8">
-                    <span className="material-symbols-outlined md:hidden text-3xl dark:text-green-300 drop-shadow-light dark:drop-shadow-dark">
+                    <span className="material-symbols-outlined md:hidden text-3xl dark:text-green-300 drop-shadow-light dark:drop-shadow-dark" onClick={handleClick}>
                         camping
                     </span>
                     <input type="checkbox" id="theme" className="hidden" onChange={props.onChange}/>

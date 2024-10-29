@@ -1,9 +1,15 @@
 import Logo from '../components/Logo.jsx'
 import Button from "../components/Button.jsx";
+import {useNavigate} from "react-router-dom";
 
 function Form() {
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
+    const navigation = useNavigate();
+
+    const handleClick = ()=> {
+        navigation(-1);
+    }
 
     return (
         <div className="max-w-2xl mx-auto bg-green-400 dark:bg-green-900 md:rounded-xl md:border-2 border-black p-3 md:px-20">
@@ -13,7 +19,7 @@ function Form() {
             <main className="p-5 bg-green-500 dark:bg-green-700 text-green-950 dark:text-green-100 tracking-wide rounded-xl border-2 border-black">
                 <div className="flex justify-between items-center drop-shadow-light dark:drop-shadow-dark">
                     <h2 className="text-xl">New Camping</h2>
-                    <span className="material-symbols-outlined md:cursor-pointer text-2xl">
+                    <span className="material-symbols-outlined md:cursor-pointer text-2xl" onClick={handleClick}>
                         close
                     </span>
                 </div>
@@ -41,8 +47,8 @@ function Form() {
                 </form>
             </main>
             <div className="flex justify-center gap-20 mt-4">
-                <Button label="Save"/>
-                <Button label="Reset"/>
+                <Button label="Save" id="save"/>
+                <Button label="Reset" id="reset"/>
             </div>
         </div>
     )

@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 
 function App() {
     const [isDark, setDark] = useState(false);
+    // const [campingTrips, setCampingTrips] = useState([]);
 
     const toggleTheme = ()=> {
         setDark(!isDark);

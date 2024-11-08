@@ -1,7 +1,7 @@
 import Logo from '../components/Logo.jsx'
 import Button from "../components/Button.jsx";
-import {useNavigate} from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function Form() {
     const [campingTrips, setCampingTrip] = useState([]);
@@ -9,6 +9,18 @@ function Form() {
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
     const navigation = useNavigate();
+
+    useEffect(() => {
+        const data = localStorage.getItem("campingTrips");
+
+        if(data) {
+            setCampingTrip(JSON.parse(data));
+        }
+    }, []);
+
+    useEffect(()=>{
+        localStorage.setItem("campingTrips", JSON.stringify(campingTrips));
+    }, [campingTrips])
 
     const handleClick = ()=> {
         navigation(-1);
@@ -18,14 +30,16 @@ function Form() {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
-        console.log("first - formData");
-        console.log(formData);
-        const newTrip = { destination: formData.get("destination"),
-                                numParticipants: formData.get("participants"),
-                                checkIn: formData.get("checkIn"),
-                                checkOut: formData.get("checkOut"),
-                                website: formData.get("website")
-                            };
+        // console.log("first - formData");
+        // console.log(formData);
+        const newTrip =
+            {
+                destination: formData.get("destination"),
+                numParticipants: formData.get("participants"),
+                checkIn: formData.get("checkIn"),
+                checkOut: formData.get("checkOut"),
+                website: formData.get("website")
+            };
 
         setCampingTrip([...campingTrips, newTrip]);
     }
@@ -65,10 +79,10 @@ function Form() {
 
                     <label htmlFor="website">Website:</label>
                     <input id="website" name="website" type="text" className={inputStyle}/>
-                    {/*<input type='submit' />*/}
+                    <input type='submit' />
                     <div className="flex justify-center gap-20 mt-4">
-                        <Button label="Save" id="save"/>
-                        <Button label="Reset" id="reset"/>
+                        {/*<Button label="Save" id="save"/>*/}
+                        {/*<Button label="Reset" id="reset"/>*/}
                     </div>
                 </form>
             </main>

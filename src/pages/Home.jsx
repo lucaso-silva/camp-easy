@@ -2,13 +2,21 @@ import Logo from '../components/Logo.jsx'
 import Button from '../components/Button.jsx';
 import TripInfoCard from "../components/TripInfoCard.jsx";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function Home(props) {
     const navigate = useNavigate();
+    const [campingTrips, setCampingTrips] = useState([]);
 
     const handleClick = () => {
         navigate('/form');
     }
+
+    useEffect(() => {
+        const dataTrips = JSON.parse(localStorage.getItem('campingTrips'));
+        setCampingTrips(dataTrips);
+        // console.log(dataTrips);
+    }, []);
 
     return(
         <div className="max-w-3xl mx-auto bg-green-400 dark:bg-green-900 md:rounded-xl md:border-2 border-black">
@@ -24,7 +32,7 @@ function Home(props) {
                     <input type="checkbox" id="theme" className="hidden" onChange={props.onChange}/>
                     <label htmlFor="theme" className="md:cursor-pointer">
                         <span className="material-symbols-outlined text-3xl dark:text-green-300 drop-shadow-light dark:drop-shadow-dark">
-                            {props.dark ? "dark_mode" : "light_mode"}
+                            {props.dark ?  "light_mode" : "dark_mode"}
                         </span>
                     </label>
                 </div>
@@ -42,8 +50,8 @@ function Home(props) {
                         search
                     </span>
                 </div>
-                <TripInfoCard />
-                <TripInfoCard />
+                { campingTrips ? campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} />) : <p>No data</p> }
+                {/*<TripInfoCard />*/}
             </main>
             <footer>
 

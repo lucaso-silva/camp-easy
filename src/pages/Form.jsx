@@ -2,6 +2,7 @@ import Logo from '../components/Logo.jsx'
 import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { nanoid } from 'nanoid';
 
 function Form() {
     const [campingTrips, setCampingTrip] = useState([]);
@@ -34,6 +35,7 @@ function Form() {
         // console.log(formData);
         const newTrip =
             {
+                id: nanoid(),
                 destination: formData.get("destination"),
                 numParticipants: formData.get("participants"),
                 checkIn: formData.get("checkIn"),
@@ -43,7 +45,7 @@ function Form() {
 
         setCampingTrip([...campingTrips, newTrip]);
     }
-    console.log("second - state");
+    // console.log("second - state");
     console.log(campingTrips);
 
     return (

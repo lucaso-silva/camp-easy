@@ -7,7 +7,6 @@ import { Route, Routes } from 'react-router-dom';
 
 function App() {
     const [isDark, setDark] = useState(false);
-    // const [campingTrips, setCampingTrips] = useState([]);
 
     useEffect(() => {
         const data = localStorage.getItem("dark-theme");
@@ -24,6 +23,10 @@ function App() {
     const toggleTheme = ()=> {
         setDark(!isDark);
         document.body.classList.toggle("dark");
+    }
+
+    if(isDark) {
+        document.body.classList.add("dark");
     }
 
     return (

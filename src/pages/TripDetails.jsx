@@ -1,16 +1,19 @@
 import Logo from "../components/Logo.jsx";
 import Button from "../components/Button.jsx";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 
 function TripDetails() {
     const navigation = useNavigate();
+    const location = useLocation();
+    const camping = location.state;
+    console.log(camping);
 
     const handleClick = (e)=> {
         if(e.target.id === 'close') {
             navigation('/');
 
         } else if (e.target.id === 'edit') {
-            navigation('/form')
+            navigation('/edit', {state: camping});
         }
     }
 

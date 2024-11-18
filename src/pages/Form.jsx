@@ -24,7 +24,7 @@ function Form() {
     }, [campingTrips])
 
     const handleClick = ()=> {
-        navigation(-1);
+        navigation('/');
     }
 
     const addNewTrip = (e) => {
@@ -46,7 +46,7 @@ function Form() {
         setCampingTrip([...campingTrips, newTrip]);
 
     }
-    // console.log("second - state");
+
     console.log(campingTrips);
 
     return (

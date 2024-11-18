@@ -8,10 +8,10 @@ function TripInfoCard({ campingTrip, deleteTrip }) {
 
     const handleClick = (e) => {
         if(e.target.id === 'edit') {
-            navigate('/form');
+            navigate('/edit', {state: campingTrip});
         }
         if(e.target.id === 'more') {
-            navigate('/tripdetails');
+            navigate('/tripdetails', {state: campingTrip});
         }
 
         if(e.target.id === 'delete') {

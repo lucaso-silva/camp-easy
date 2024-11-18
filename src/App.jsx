@@ -1,5 +1,6 @@
 import Home  from './pages/Home.jsx';
 import Form from './pages/Form.jsx';
+import Edit from './pages/Edit.jsx';
 import TripDetails from './pages/TripDetails.jsx';
 import Error from './pages/Error.jsx';
 import {useState, useEffect} from "react";
@@ -35,6 +36,7 @@ function App() {
                 <Route index element={<Home onChange={toggleTheme} dark={isDark}/>} />
                 <Route path="home" element={<Home onChange={toggleTheme} dark={isDark}/>} />
                 <Route path="/form" element={<Form />} />
+                <Route path="/edit" element={<Edit />}/>
                 <Route path="/tripdetails" element={<TripDetails />} />
                 <Route path="*" element={<Error />} />
             </Routes>

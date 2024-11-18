@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {useEffect} from "react";
 
-function TripInfoCard({ campingTrip }) {
+function TripInfoCard({ campingTrip, deleteTrip }) {
     const textStyle = "drop-shadow-light dark:drop-shadow-dark";
     const iconStyle = "material-symbols-outlined text-2xl md:text-3xl dark:text-green-300 drop-shadow-light dark:drop-shadow-dark md:cursor-pointer";
     const navigate = useNavigate();
@@ -15,8 +15,7 @@ function TripInfoCard({ campingTrip }) {
         }
 
         if(e.target.id === 'delete') {
-            const toDelete = campingTrip;
-            console.log(toDelete);
+           deleteTrip(campingTrip);
         }
     }
 

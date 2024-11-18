@@ -12,6 +12,24 @@ function Home(props) {
         navigate('/form');
     }
 
+    const deleteTrip = (campingTrip) => {
+        const updatedTrips = campingTrips.filter(trip => trip.id !== campingTrip.id);
+        setCampingTrips(updatedTrips);
+        localStorage.setItem("campingTrips", JSON.stringify(updatedTrips));
+    }
+
+    // const tripInfoCard = () => {
+    //     campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} deleteTrip={deleteTrip}/>);
+    // }
+
+    // const emptyCard = () => {
+    //     return (
+    //         <div className="h-80 text-center py-10">
+    //             <p>No trips to display</p>
+    //         </div>
+    //     );
+    // }
+
     useEffect(() => {
         const dataTrips = JSON.parse(localStorage.getItem('campingTrips'));
         setCampingTrips(dataTrips);
@@ -50,8 +68,15 @@ function Home(props) {
                         search
                     </span>
                 </div>
-                { campingTrips ? campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} />) : <p>No data</p> }
-                {/*<TripInfoCard />*/}
+                {/*{ campingTrips ? tripInfoCard() : "" }*/}
+                {campingTrips.length > 0 ?
+                    campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} deleteTrip={deleteTrip}/>) :
+                    (
+                        <div className="h-80 text-center py-10">
+                            <p>You have no trips to display yet..</p>
+                        </div>
+                    )
+                }
             </main>
             <footer>
 

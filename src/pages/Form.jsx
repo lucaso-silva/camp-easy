@@ -28,7 +28,7 @@ function Form() {
     }
 
     const addNewTrip = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
         // console.log("first - formData");
@@ -44,6 +44,7 @@ function Form() {
             };
 
         setCampingTrip([...campingTrips, newTrip]);
+
     }
     // console.log("second - state");
     console.log(campingTrips);
@@ -63,19 +64,19 @@ function Form() {
                 <form onSubmit={addNewTrip}
                       className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
                     <label htmlFor="destination">Destination</label>
-                    <input name="destination" type="text" className={inputStyle}/>
+                    <input name="destination" type="text" className={inputStyle} id="destination"/>
 
                     <label htmlFor="participants">n. participants</label>
-                    <input name="participants" type="number" className={inputNumStyle}/>
+                    <input name="participants" type="number" className={inputNumStyle} id="participants" />
 
                     <div className="flex justify-between">
                         <div className="flex flex-col">
                             <label htmlFor="checkIn">Check-in</label>
-                            <input name="checkIn" type="date" className={inputStyle}/>
+                            <input name="checkIn" type="date" className={inputStyle} id="checkIn"/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="checkOut">Check-out</label>
-                            <input name="checkOut" type="date" className={inputStyle}/>
+                            <input name="checkOut" type="date" className={inputStyle} id="checkOut"/>
                         </div>
                     </div>
 

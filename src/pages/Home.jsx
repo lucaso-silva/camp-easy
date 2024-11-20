@@ -69,7 +69,7 @@ function Home(props) {
                     </span>
                 </div>
                 {/*{ campingTrips ? tripInfoCard() : "" }*/}
-                {campingTrips.length > 0 ?
+                {campingTrips.length != 0 ?
                     campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} deleteTrip={deleteTrip}/>) :
                     (
                         <div className="h-80 text-center py-10">

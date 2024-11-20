@@ -63,7 +63,7 @@ function Home(props) {
                     <h2 className="text-2xl text-green-950 dark:text-green-400 drop-shadow-light dark:drop-shadow-dark">
                         Upcoming
                     </h2>
-                    <input type="search" className="hidden md:block bg-green-200 rounded-lg bg-search bg-no-repeat bg-left py-1 pl-7 font-secondFont font-thin border-green-950 border-2 w-3/5"/>
+                    <input type="search" id="filter" className="hidden md:block bg-green-200 rounded-lg bg-search bg-no-repeat bg-left py-1 pl-7 font-secondFont font-thin border-green-950 border-2 w-3/5"/>
                     <span className="material-symbols-outlined text-3xl md:hidden dark:text-green-300 drop-shadow-light dark:drop-shadow-dark">
                         search
                     </span>

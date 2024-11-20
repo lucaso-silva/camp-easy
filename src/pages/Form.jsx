@@ -62,6 +62,7 @@ function Form() {
                     </span>
                 </div>
                 <form onSubmit={addNewTrip}
+                      id="newTrip"
                       className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
                     <label htmlFor="destination">Destination</label>
                     <input name="destination" type="text" className={inputStyle} id="destination"/>
@@ -98,3 +99,5 @@ function Form() {
 }
 
 export default Form;
+
+//Input validation -

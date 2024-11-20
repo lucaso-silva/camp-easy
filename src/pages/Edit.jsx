@@ -10,10 +10,10 @@ function Edit() {
     console.log(camping);
     const [campingTrips, setCampingTrips] = useState([]);
 
-    const [numParticipants, setNumParticipants] = useState([]);
-    const [checkIn, setCheckIn] = useState(false);
-    const [checkOut, setCheckOut] = useState(false);
-    const [website, setWebsite] = useState(false);
+    const [participants, setParticipants] = useState(camping.numParticipants);
+    const [inDate, setInDate] = useState(camping.checkIn);
+    const [outDate, setOutDate] = useState(camping.checkOut);
+    const [site, setSite] = useState(camping.website);
 
     const handleClick = ()=> {
         navigation('/');
@@ -29,10 +29,51 @@ function Edit() {
             setCampingTrips(JSON.parse(data));
         }
 
-    },[])
+    },[]);
+
+    useEffect(()=>{
+        localStorage.setItem("campingTrips", JSON.stringify(campingTrips));
+
+    }, [campingTrips])
+
+    const updateField = (e) => {
+        if(e.target.id === "participants") {
+            setParticipants(e.target.value);
+            console.log("new n participants: " + participants);
+
+        } else if (e.target.id === "checkIn") {
+            setInDate(e.target.value);
+            console.log("new check in : " + inDate);
+
+        } else if (e.target.id === "checkOut") {
+            setOutDate(e.target.value);
+            console.log("new check out: " + outDate);
+
+        } else if (e.target.id === "website") {
+            setSite(e.target.value);
+            console.log("new site: " + site);
+        }
+    }
 
     const updateTrip = () => {
+        const updatedTrips = campingTrips.map((trip) =>{
+            if(trip.id === camping.id) {
+                return { ...trip,
+                        numParticipants: participants,
+                        checkIn: inDate,
+                        checkOut: outDate,
+                        website: site,
+                }
+            }
+            return trip;
+        })
+        setCampingTrips(updatedTrips);
 
+        console.log("updated trips");
+        console.log(updatedTrips);
+        console.log(campingTrips);
+
+        // navigation('/')
     }
 
     return (
@@ -48,27 +89,25 @@ function Edit() {
                     </span>
                 </div>
                 <div className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
-                    {/*<label htmlFor="destination">Destination</label>*/}
-                    {/*<input name="destination" type="text" className={inputStyle} id="destination" value={camping.destination}/>*/}
                     <h3 className="mb-2.5">{camping.destination}</h3>
+
                     <label htmlFor="participants">n. participants</label>
-                    <input name="participants" type="number" className={inputNumStyle} id="participants" value={camping.numParticipants} />
+                    <input name="participants" type="number" className={inputNumStyle} id="participants" value={participants} onChange={updateField}/>
 
                     <div className="flex justify-between">
                         <div className="flex flex-col">
                             <label htmlFor="checkIn">Check-in</label>
-                            <input name="checkIn" type="date" className={inputStyle} id="checkIn" value={camping.checkIn} />
+                            <input name="checkIn" type="date" className={inputStyle} id="checkIn" value={inDate} onChange={updateField}/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="checkOut">Check-out</label>
-                            <input name="checkOut" type="date" className={inputStyle} id="checkOut" value={camping.checkOut} />
+                            <input name="checkOut" type="date" className={inputStyle} id="checkOut" value={outDate} onChange={updateField}/>
                         </div>
                     </div>
 
                     <label htmlFor="website">Website:</label>
-                    <input id="website" name="website" type="text" className={inputStyle} value={camping.website} />
+                    <input id="website" name="website" type="text" className={inputStyle} value={site} onChange={updateField}/>
 
-                    {/*<input type="submit" value="Update" className="hover:cursor-pointer"/>*/}
                     <Button label={'Update'} onClick={updateTrip} id="update"  />
                 </div>
             </main>

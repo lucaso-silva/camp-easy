@@ -12,12 +12,6 @@ function Home(props) {
         navigate('/form');
     }
 
-    const deleteTrip = (campingTrip) => {
-        const updatedTrips = campingTrips.filter(trip => trip.id !== campingTrip.id);
-        setCampingTrips(updatedTrips);
-        localStorage.setItem("campingTrips", JSON.stringify(updatedTrips));
-    }
-
     // const tripInfoCard = () => {
     //     campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} deleteTrip={deleteTrip}/>);
     // }
@@ -35,6 +29,24 @@ function Home(props) {
         setCampingTrips(dataTrips);
         // console.log(dataTrips);
     }, []);
+
+    const deleteTrip = (campingTrip) => {
+        const updatedTrips = campingTrips.filter(trip => trip.id !== campingTrip.id);
+        setCampingTrips(updatedTrips);
+        localStorage.setItem("campingTrips", JSON.stringify(updatedTrips));
+    }
+
+    const filterTrips = (e) => {
+        if(e.target.value === "") {
+            setCampingTrips(JSON.parse(localStorage.getItem("campingTrips")));
+        }
+        const filteredTrips = campingTrips.filter((trip)=>{
+            if(trip.destination.toLowerCase().startsWith(e.target.value.toLowerCase())) {
+                return trip;
+            }
+        })
+        setCampingTrips(filteredTrips);
+    }
 
     return(
         <div className="max-w-3xl mx-auto bg-green-400 dark:bg-green-900 md:rounded-xl md:border-2 border-black">
@@ -63,7 +75,7 @@ function Home(props) {
                     <h2 className="text-2xl text-green-950 dark:text-green-400 drop-shadow-light dark:drop-shadow-dark">
                         Upcoming
                     </h2>
-                    <input type="search" id="filter" className="hidden md:block bg-green-200 rounded-lg bg-search bg-no-repeat bg-left py-1 pl-7 font-secondFont font-thin border-green-950 border-2 w-3/5"/>
+                    <input type="search" id="filter" onChange={filterTrips} className="hidden md:block bg-green-200 rounded-lg bg-search bg-no-repeat bg-left py-1 pl-7 font-secondFont font-thin border-green-950 border-2 w-3/5"/>
                     <span className="material-symbols-outlined text-3xl md:hidden dark:text-green-300 drop-shadow-light dark:drop-shadow-dark">
                         search
                     </span>

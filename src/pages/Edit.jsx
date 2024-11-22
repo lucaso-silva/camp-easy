@@ -19,6 +19,10 @@ function Edit() {
         navigation('/');
     }
 
+    const home = () => {
+        navigation('/');
+    }
+
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
 
@@ -39,19 +43,16 @@ function Edit() {
     const updateField = (e) => {
         if(e.target.id === "participants") {
             setParticipants(e.target.value);
-            console.log("new n participants: " + participants);
 
         } else if (e.target.id === "checkIn") {
             setInDate(e.target.value);
-            console.log("new check in : " + inDate);
 
         } else if (e.target.id === "checkOut") {
             setOutDate(e.target.value);
-            console.log("new check out: " + outDate);
 
         } else if (e.target.id === "website") {
             setSite(e.target.value);
-            console.log("new site: " + site);
+
         }
     }
 
@@ -73,7 +74,7 @@ function Edit() {
         console.log(updatedTrips);
         console.log(campingTrips);
 
-        // navigation('/')
+        // navigation('/', {state: updatedTrips});
     }
 
     return (

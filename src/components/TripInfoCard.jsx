@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import {useEffect} from "react";
 
 function TripInfoCard({ campingTrip, deleteTrip }) {
     const textStyle = "drop-shadow-light dark:drop-shadow-dark";

@@ -26,7 +26,7 @@ function TripDetails() {
             <main
                 className="p-5 bg-green-500 dark:bg-green-700 text-green-950 dark:text-green-100 tracking-wide rounded-xl border-2 border-black">
                 <div className="flex justify-between items-center drop-shadow-light dark:drop-shadow-dark">
-                    <h2 className="text-xl">Cultus Lake</h2>
+                    <h2 className="text-xl">{camping.destination}</h2>
                     <span className="material-symbols-outlined md:cursor-pointer text-2xl" onClick={handleClick} id="close">
                         close
                     </span>

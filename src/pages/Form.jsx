@@ -39,6 +39,8 @@ function Form() {
                 destination: formData.get("destination"),
                 numParticipants: formData.get("participants"),
                 checkIn: formData.get("checkIn"),
+                lat: 49.0502783,
+                long: -121.9883143,
                 checkOut: formData.get("checkOut"),
                 website: formData.get("website")
             };
@@ -65,19 +67,19 @@ function Form() {
                       id="newTrip"
                       className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
                     <label htmlFor="destination">Destination</label>
-                    <input name="destination" type="text" className={inputStyle} id="destination"/>
+                    <input name="destination" type="text" className={inputStyle} id="destination" required/>
 
                     <label htmlFor="participants">n. participants</label>
-                    <input name="participants" type="number" className={inputNumStyle} id="participants" />
+                    <input name="participants" type="number" className={inputNumStyle} id="participants" defaultValue={1} />
 
                     <div className="flex justify-between">
                         <div className="flex flex-col">
                             <label htmlFor="checkIn">Check-in</label>
-                            <input name="checkIn" type="date" className={inputStyle} id="checkIn"/>
+                            <input name="checkIn" type="date" className={inputStyle} id="checkIn" required/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="checkOut">Check-out</label>
-                            <input name="checkOut" type="date" className={inputStyle} id="checkOut"/>
+                            <input name="checkOut" type="date" className={inputStyle} id="checkOut" required/>
                         </div>
                     </div>
 

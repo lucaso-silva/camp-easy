@@ -37,11 +37,10 @@ function Home(props) {
     }
 
     const filterTrips = (e) => {
-        if(e.target.value === "") {
-            setCampingTrips(JSON.parse(localStorage.getItem("campingTrips")));
-        }
-        const filteredTrips = campingTrips.filter((trip)=>{
-            if(trip.destination.toLowerCase().startsWith(e.target.value.toLowerCase())) {
+        const allTrips = JSON.parse(localStorage.getItem("campingTrips"));
+
+        const filteredTrips = allTrips.filter((trip)=>{
+            if(trip.destination.toLowerCase().includes(e.target.value.toLowerCase())) {
                 return trip;
             }
         })

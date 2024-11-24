@@ -2,6 +2,7 @@ import Logo from '../components/Logo.jsx'
 import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { nanoid } from 'nanoid';
 
 function Form() {
@@ -10,6 +11,17 @@ function Form() {
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
     const navigation = useNavigate();
+    const { register,
+            handleSubmit,
+            formState: { errors },
+
+    } = useForm({
+        defaultValues: {
+            destination: "",
+            numParticipants: 1,
+            website: "",
+        }
+    });
 
     useEffect(() => {
         const data = localStorage.getItem("campingTrips");
@@ -27,29 +39,47 @@ function Form() {
         navigation('/');
     }
 
-    const addNewTrip = (e) => {
+    console.log(errors);
+
+    const addNewTrip = (data) => {
         // e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        // console.log("first - formData");
-        // console.log(formData);
+        // const form = e.target;
+        // const formData = new FormData(form);
+        // // console.log("first - formData");
+        // // console.log(formData);
+        // const newTrip =
+        //     {
+        //         id: nanoid(),
+        //         destination: formData.get("destination"),
+        //         numParticipants: formData.get("participants"),
+        //         checkIn: formData.get("checkIn"),
+        //         lat: 49.0502783,
+        //         long: -121.9883143,
+        //         checkOut: formData.get("checkOut"),
+        //         website: formData.get("website")
+        //     };
+        //
+        // setCampingTrip([...campingTrips, newTrip]);
+
+        console.log(data);
         const newTrip =
             {
                 id: nanoid(),
-                destination: formData.get("destination"),
-                numParticipants: formData.get("participants"),
-                checkIn: formData.get("checkIn"),
+                destination: data.destination,
+                numParticipants: data.numParticipants,
+                checkIn: data.checkIn,
                 lat: 49.0502783,
                 long: -121.9883143,
-                checkOut: formData.get("checkOut"),
-                website: formData.get("website")
+                checkOut: data.checkOut,
+                website: data.website
             };
-
         setCampingTrip([...campingTrips, newTrip]);
+        // navigation('/');
 
     }
 
-    console.log(campingTrips);
+
+    // console.log(campingTrips);
 
     return (
         <div className="max-w-2xl mx-auto bg-green-400 dark:bg-green-900 md:rounded-xl md:border-2 border-black p-3 md:px-20">
@@ -63,29 +93,54 @@ function Form() {
                         close
                     </span>
                 </div>
-                <form onSubmit={addNewTrip}
+                <form onSubmit={handleSubmit(addNewTrip)}
                       id="newTrip"
                       className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
                     <label htmlFor="destination">Destination</label>
-                    <input name="destination" type="text" className={inputStyle} id="destination" required/>
+                    <input name="destination" type="text" className={inputStyle} id="destination"
+                           {...register("destination", {required: 'Please inform the place'}
+                           )}
+                    />
+                    <p>{errors.destination?.message} </p>
 
                     <label htmlFor="participants">n. participants</label>
-                    <input name="participants" type="number" className={inputNumStyle} id="participants" defaultValue={1} />
+                    <input name="participants" type="number" className={inputNumStyle} id="participants"
+                           {...register("numParticipants", {
+                                   min: {value: 1, message: "You need at least 1 participant"},
+                                   max: {value: 50, message: "The max number of participants is 50"}
+                               }
+                           )}
+                    />
+                    <p>{errors.numParticipants?.message}</p>
 
                     <div className="flex justify-between">
                         <div className="flex flex-col">
                             <label htmlFor="checkIn">Check-in</label>
-                            <input name="checkIn" type="date" className={inputStyle} id="checkIn" required/>
+                            <input name="checkIn" type="date" className={inputStyle} id="checkIn"
+                                   {...register("checkIn", {
+                                           required: "Please inform a date for check-in",
+                                           // valueAsDate: true
+                                       }
+                                   )}
+                            />
+                            <p>{errors.checkIn?.message}</p>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="checkOut">Check-out</label>
-                            <input name="checkOut" type="date" className={inputStyle} id="checkOut" required/>
+                            <input name="checkOut" type="date" className={inputStyle} id="checkOut"
+                                   {...register("checkOut", {
+                                           required: "Please inform a date for check out",
+                                           // valueAsDate: true
+                                       }
+                                   )}
+                            />
+                            <p>{errors.checkOut?.message}</p>
                         </div>
                     </div>
 
                     <label htmlFor="website">Website:</label>
-                    <input id="website" name="website" type="text" className={inputStyle}/>
-                    <input type='submit' />
+                    <input id="website" name="website" type="text" className={inputStyle} {...register("website")}/>
+                    <input type='submit'/>
                     <div className="flex justify-center gap-20 mt-4">
                         {/*<Button label="Save" id="save"/>*/}
                         {/*<Button label="Reset" id="reset"/>*/}

@@ -10,9 +10,12 @@ function Form() {
 
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
+    const errorMsg = "text-red-600 mb-1";
+
     const navigation = useNavigate();
     const { register,
             handleSubmit,
+            watch,
             formState: { errors },
 
     } = useForm({
@@ -40,6 +43,21 @@ function Form() {
     }
 
     console.log(errors);
+
+    const [checkInDate, checkOutDate] = watch(["checkIn", "checkOut"]);
+
+    const validateCheckIn = (value) => {
+        // campingTrips.forEach((trip)=>{
+        //     console.log(value, trip.checkIn);
+        //     if(value === trip.checkIn) {
+        //         console.log(trip.destination)
+        //         return false;
+        //     }
+        // })
+        // return true;
+        const sameDate = campingTrips.some((trip) => trip.checkIn === value);
+        return !sameDate;
+    }
 
     const addNewTrip = (data) => {
         // e.preventDefault();
@@ -97,49 +115,64 @@ function Form() {
                       id="newTrip"
                       className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
                     <label htmlFor="destination">Destination</label>
-                    <input name="destination" type="text" className={inputStyle} id="destination"
+                    <input type="text" className={inputStyle} id="destination"
                            {...register("destination", {required: 'Please inform the place'}
                            )}
                     />
-                    <p>{errors.destination?.message} </p>
+                    <p className={errorMsg}>{errors.destination?.message}</p>
 
                     <label htmlFor="participants">n. participants</label>
-                    <input name="participants" type="number" className={inputNumStyle} id="participants"
+                    <input type="number" className={inputNumStyle} id="participants"
                            {...register("numParticipants", {
                                    min: {value: 1, message: "You need at least 1 participant"},
                                    max: {value: 50, message: "The max number of participants is 50"}
                                }
                            )}
                     />
-                    <p>{errors.numParticipants?.message}</p>
+                    <p className={errorMsg}>{errors.numParticipants?.message}</p>
 
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mb-2">
                         <div className="flex flex-col">
                             <label htmlFor="checkIn">Check-in</label>
-                            <input name="checkIn" type="date" className={inputStyle} id="checkIn"
+                            <input type="date" className={inputStyle} id="checkIn"
                                    {...register("checkIn", {
-                                           required: "Please inform a date for check-in",
-                                           // valueAsDate: true
+                                       required: "Please inform a date for check-in",
+                                       validate:
+                                           {
+                                               sameCheckInDate: (value) => {
+                                                   return ( campingTrips.includes(value) || "There is another trip with same checkIn date" );
+                                               }
+                                           },
+                                           // valueAsDate: true,
                                        }
                                    )}
                             />
-                            <p>{errors.checkIn?.message}</p>
+                            <p className={errorMsg}>{errors.checkIn?.message}</p>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="checkOut">Check-out</label>
-                            <input name="checkOut" type="date" className={inputStyle} id="checkOut"
+                            <input type="date" className={inputStyle} id="checkOut"
                                    {...register("checkOut", {
-                                           required: "Please inform a date for check out",
+                                       required: "Please inform a date for check out",
+                                       validate:
+                                           {
+                                               sameCheckOutDate: (value) => {
+                                                   return ( campingTrips.includes(value) || "There is another trip with same check out date");
+                                               },
+
+                                               checkOutBeforeCheckIn: (value) => value <=
+                                           }
                                            // valueAsDate: true
                                        }
                                    )}
                             />
-                            <p>{errors.checkOut?.message}</p>
+                            {/*<p className={errorMsg}>{errors.checkOut?.message}</p>*/}
                         </div>
                     </div>
 
                     <label htmlFor="website">Website:</label>
-                    <input id="website" name="website" type="text" className={inputStyle} {...register("website")}/>
+                    <input type="text" id="website" className={inputStyle} {...register("website")}/>
+
                     <input type='submit'/>
                     <div className="flex justify-center gap-20 mt-4">
                         {/*<Button label="Save" id="save"/>*/}

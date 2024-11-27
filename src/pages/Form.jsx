@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { nanoid } from 'nanoid';
+import PlaceAutoComplete from "../components/PlaceAutoComplete";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 function Form() {
     const [campingTrips, setCampingTrip] = useState([]);
@@ -44,20 +46,20 @@ function Form() {
 
     console.log(errors);
 
-    const [checkInDate, checkOutDate] = watch(["checkIn", "checkOut"]);
+    // const [checkInDate, checkOutDate] = watch(["checkIn", "checkOut"]);
 
-    const validateCheckIn = (value) => {
-        // campingTrips.forEach((trip)=>{
-        //     console.log(value, trip.checkIn);
-        //     if(value === trip.checkIn) {
-        //         console.log(trip.destination)
-        //         return false;
-        //     }
-        // })
-        // return true;
-        const sameDate = campingTrips.some((trip) => trip.checkIn === value);
-        return !sameDate;
-    }
+    // const validateCheckIn = (value) => {
+    //     // campingTrips.forEach((trip)=>{
+    //     //     console.log(value, trip.checkIn);
+    //     //     if(value === trip.checkIn) {
+    //     //         console.log(trip.destination)
+    //     //         return false;
+    //     //     }
+    //     // })
+    //     // return true;
+    //     const sameDate = campingTrips.some((trip) => trip.checkIn === value);
+    //     return !sameDate;
+    // }
 
     const addNewTrip = (data) => {
         // e.preventDefault();
@@ -119,6 +121,9 @@ function Form() {
                            {...register("destination", {required: 'Please inform the place'}
                            )}
                     />
+                    <APIProvider apiKey={GOOGLE_API_KEY}>
+                        <PlaceAutoComplete />
+                    </APIProvider>
                     <p className={errorMsg}>{errors.destination?.message}</p>
 
                     <label htmlFor="participants">n. participants</label>
@@ -140,7 +145,8 @@ function Form() {
                                        validate:
                                            {
                                                sameCheckInDate: (value) => {
-                                                   return ( campingTrips.includes(value) || "There is another trip with same checkIn date" );
+                                                   //
+                                                   campingTrips.forEach((trip) => trip.checkIn === value || "There is another trip with same check in date");
                                                }
                                            },
                                            // valueAsDate: true,
@@ -157,10 +163,11 @@ function Form() {
                                        validate:
                                            {
                                                sameCheckOutDate: (value) => {
-                                                   return ( campingTrips.includes(value) || "There is another trip with same check out date");
-                                               },
+                                                   //
+                                                   campingTrips.forEach((trip) => trip.checkOut === value || "There is another trip with same check out date");
+                                               }
 
-                                               checkOutBeforeCheckIn: (value) => value <=
+                                               // checkOutBeforeCheckIn: (value) => value <=
                                            }
                                            // valueAsDate: true
                                        }

@@ -1,24 +1,33 @@
 import Logo from '../components/Logo.jsx'
 import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect, useRef } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { nanoid } from 'nanoid';
 import PlaceAutoComplete from "../components/PlaceAutoComplete";
-import { APIProvider } from "@vis.gl/react-google-maps";
+import { APIProvider, useMapsLibrary } from "@vis.gl/react-google-maps";
 
 function Form() {
     const [campingTrips, setCampingTrip] = useState([]);
+    const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
+    const places = useMapsLibrary("places");
 
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
     const errorMsg = "text-red-600 mb-1";
 
+    // const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+    // const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY;
+    const GOOGLE_API_KEY = 'xxxxxxx';
+
+// https://react-hook-form.com/faqs#Howtosharerefusage
+
     const navigation = useNavigate();
     const { register,
-            handleSubmit,
-            watch,
-            formState: { errors },
+        handleSubmit,
+        control,
+        watch,
+        formState: { errors },
 
     } = useForm({
         defaultValues: {
@@ -27,6 +36,14 @@ function Form() {
             website: "",
         }
     });
+
+    const destinationRef = useRef(null);
+    // const { ref, ...rest } = register("destination");
+    // useImperativeHandle(ref, () => destinationRef.current);
+
+    const Controller = ({ control, register, name, ref, rules, render }) => {
+        return render();
+    };
 
     useEffect(() => {
         const data = localStorage.getItem("campingTrips");
@@ -38,7 +55,25 @@ function Form() {
 
     useEffect(()=>{
         localStorage.setItem("campingTrips", JSON.stringify(campingTrips));
-    }, [campingTrips])
+
+    }, [campingTrips]);
+    useEffect(() => {
+        if(!places || !destinationRef.current) return;
+
+        const options = {
+            fields: ["geometry", "name", "formatted_address"],
+        };
+
+        setPlaceAutocomplete(new places.Autocomplete(destinationRef.current, options));
+    }, [places]);
+
+    useEffect(() => {
+        if(!placeAutocomplete) return;
+
+        placeAutocomplete.addListener("place_changed", () => {
+            console.log(placeAutocomplete.getPlace());
+        })
+    }, [placeAutocomplete]);
 
     const handleClick = ()=> {
         navigation('/');
@@ -100,6 +135,7 @@ function Form() {
 
 
     // console.log(campingTrips);
+    // console.log(process.env.VITE_GOOGLE_API_KEY);
 
     return (
         <div className="max-w-2xl mx-auto bg-green-400 dark:bg-green-900 md:rounded-xl md:border-2 border-black p-3 md:px-20">
@@ -115,16 +151,29 @@ function Form() {
                 </div>
                 <form onSubmit={handleSubmit(addNewTrip)}
                       id="newTrip"
-                      className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark">
+                      className="flex flex-col gap-1 mt-8 drop-shadow-light dark:drop-shadow-dark"
+                >
                     <label htmlFor="destination">Destination</label>
-                    <input type="text" className={inputStyle} id="destination"
-                           {...register("destination", {required: 'Please inform the place'}
-                           )}
-                    />
+
                     <APIProvider apiKey={GOOGLE_API_KEY}>
-                        <PlaceAutoComplete />
+                    {/*<input {...rest}  ref={destinationRef} type="text" className={inputStyle} id="destination" />*/}
+                    <Controller {...{
+                                    control,
+                                    register,
+                                    name: 'destination',
+                                    ref: { destinationRef },
+                                    rules: { required: true},
+                                    render: () => <PlaceAutoComplete />
+                                    }
+                                }
+                    />
+
                     </APIProvider>
-                    <p className={errorMsg}>{errors.destination?.message}</p>
+
+                    {/*<APIProvider apiKey={GOOGLE_API_KEY}>*/}
+                    {/*    <PlaceAutoComplete style={inputStyle} id={"destination"} />*/}
+                    {/*</APIProvider>*/}
+                    {/*<p className={errorMsg}>{errors.destination?.message}</p>*/}
 
                     <label htmlFor="participants">n. participants</label>
                     <input type="number" className={inputNumStyle} id="participants"
@@ -141,14 +190,14 @@ function Form() {
                             <label htmlFor="checkIn">Check-in</label>
                             <input type="date" className={inputStyle} id="checkIn"
                                    {...register("checkIn", {
-                                       required: "Please inform a date for check-in",
-                                       validate:
-                                           {
-                                               sameCheckInDate: (value) => {
-                                                   //
-                                                   campingTrips.forEach((trip) => trip.checkIn === value || "There is another trip with same check in date");
-                                               }
-                                           },
+                                           required: "Please inform a date for check-in",
+                                           validate:
+                                               {
+                                                   sameCheckInDate: (value) => {
+                                                       //
+                                                       campingTrips.forEach((trip) => trip.checkIn === value || "There is another trip with same check in date");
+                                                   }
+                                               },
                                            // valueAsDate: true,
                                        }
                                    )}
@@ -159,16 +208,16 @@ function Form() {
                             <label htmlFor="checkOut">Check-out</label>
                             <input type="date" className={inputStyle} id="checkOut"
                                    {...register("checkOut", {
-                                       required: "Please inform a date for check out",
-                                       validate:
-                                           {
-                                               sameCheckOutDate: (value) => {
-                                                   //
-                                                   campingTrips.forEach((trip) => trip.checkOut === value || "There is another trip with same check out date");
-                                               }
+                                           required: "Please inform a date for check out",
+                                           validate:
+                                               {
+                                                   sameCheckOutDate: (value) => {
+                                                       //
+                                                       campingTrips.forEach((trip) => trip.checkOut === value || "There is another trip with same check out date");
+                                                   }
 
-                                               // checkOutBeforeCheckIn: (value) => value <=
-                                           }
+                                                   // checkOutBeforeCheckIn: (value) => value <=
+                                               }
                                            // valueAsDate: true
                                        }
                                    )}

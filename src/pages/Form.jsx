@@ -5,12 +5,12 @@ import { useState, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { nanoid } from 'nanoid';
 import PlaceAutoComplete from "../components/PlaceAutoComplete";
-import { APIProvider, useMapsLibrary } from "@vis.gl/react-google-maps";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 function Form() {
     const [campingTrips, setCampingTrip] = useState([]);
-    const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
-    const places = useMapsLibrary("places");
+    // const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
+    // const places = useMapsLibrary("places");
 
     const inputStyle = "bg-green-200 rounded-lg font-secondFont font-thin border-green-900 border-2 p-0.5 pl-2 dark:text-green-800";
     const inputNumStyle = inputStyle + " w-24";
@@ -18,7 +18,7 @@ function Form() {
 
     // const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
     // const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY;
-    const GOOGLE_API_KEY = 'xxxxxxx';
+    const GOOGLE_API_KEY = 'xxxxxxxxxxx';
 
 // https://react-hook-form.com/faqs#Howtosharerefusage
 
@@ -37,12 +37,24 @@ function Form() {
         }
     });
 
-    const destinationRef = useRef(null);
+    // const destinationRef = useRef(null);
     // const { ref, ...rest } = register("destination");
     // useImperativeHandle(ref, () => destinationRef.current);
 
     const Controller = ({ control, register, name, ref, rules, render }) => {
-        return render();
+        const props = register(name, rules);
+        console.log(props);
+        return render({
+            onChange: (e) => props.onChange({
+                target: {
+                    name,
+                    value: e.target.value,
+                }
+            }),
+            onBlur: props.onBlur,
+            name: props.name,
+           // ref: props.ref,
+        });
     };
 
     useEffect(() => {
@@ -57,23 +69,24 @@ function Form() {
         localStorage.setItem("campingTrips", JSON.stringify(campingTrips));
 
     }, [campingTrips]);
-    useEffect(() => {
-        if(!places || !destinationRef.current) return;
 
-        const options = {
-            fields: ["geometry", "name", "formatted_address"],
-        };
+    // useEffect(() => {
+    //     if(!places || !destinationRef.current) return;
+    //
+    //     const options = {
+    //         fields: ["geometry", "name", "formatted_address"],
+    //     };
+    //
+    //     setPlaceAutocomplete(new places.Autocomplete(destinationRef.current, options));
+    // }, [places]);
 
-        setPlaceAutocomplete(new places.Autocomplete(destinationRef.current, options));
-    }, [places]);
-
-    useEffect(() => {
-        if(!placeAutocomplete) return;
-
-        placeAutocomplete.addListener("place_changed", () => {
-            console.log(placeAutocomplete.getPlace());
-        })
-    }, [placeAutocomplete]);
+    // useEffect(() => {
+    //     if(!placeAutocomplete) return;
+    //
+    //     placeAutocomplete.addListener("place_changed", () => {
+    //         console.log(placeAutocomplete.getPlace());
+    //     })
+    // }, [placeAutocomplete]);
 
     const handleClick = ()=> {
         navigation('/');
@@ -157,23 +170,23 @@ function Form() {
 
                     <APIProvider apiKey={GOOGLE_API_KEY}>
                     {/*<input {...rest}  ref={destinationRef} type="text" className={inputStyle} id="destination" />*/}
-                    <Controller {...{
-                                    control,
-                                    register,
-                                    name: 'destination',
-                                    ref: { destinationRef },
-                                    rules: { required: true},
-                                    render: () => <PlaceAutoComplete />
+                        <Controller {...{
+                                        control,
+                                        register,
+                                        name: 'destination',
+                        //                ref: { destinationRef },
+                        //                inputStyle: {inputStyle},
+                                        rules: { required: "Please enter a place"},
+                                        render: (props) => <PlaceAutoComplete {...props } />
+                                        }
                                     }
-                                }
-                    />
-
+                        />
                     </APIProvider>
 
                     {/*<APIProvider apiKey={GOOGLE_API_KEY}>*/}
                     {/*    <PlaceAutoComplete style={inputStyle} id={"destination"} />*/}
                     {/*</APIProvider>*/}
-                    {/*<p className={errorMsg}>{errors.destination?.message}</p>*/}
+                    <p className={errorMsg}>{errors.destination?.message}</p>
 
                     <label htmlFor="participants">n. participants</label>
                     <input type="number" className={inputNumStyle} id="participants"

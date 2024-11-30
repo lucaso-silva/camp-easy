@@ -1,6 +1,7 @@
 import Logo from "../components/Logo.jsx";
 import Button from "../components/Button.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
+import ForecastCard from "../components/ForecastCard.jsx";
 
 function TripDetails() {
     const navigation = useNavigate();
@@ -31,9 +32,16 @@ function TripDetails() {
                         close
                     </span>
                 </div>
-                <div>
+                <section id="general-info">
                     <p>It's is left 15 days until your trip</p>
-                </div>
+                    <p>Check-in: {camping.checkIn}</p>
+                    <p>Check-out: {camping.checkOut}</p>
+                    <p>Website: {camping.website}</p>
+                </section>
+                <section id="forecast" className="border-2 border-black p-2 rounded-xl mt-3">
+                    <h3>Forecast</h3>
+                    <ForecastCard lat={camping.lat} long={camping.long}/>
+                </section>
             </main>
             <div className="text-right">
                 <Button label="Edit" onClick={handleClick} id="edit"/>

@@ -7,13 +7,17 @@ function Edit() {
     const navigation = useNavigate();
     const location = useLocation();
     const camping = location.state;
-    console.log(camping);
+    const checkIn = camping.checkIn.substring(0, camping.checkIn.indexOf('T'));
+    const checkOut = camping.checkOut.substring(0, camping.checkOut.indexOf('T'));
+
     const [campingTrips, setCampingTrips] = useState([]);
 
     const [participants, setParticipants] = useState(camping.numParticipants);
-    const [inDate, setInDate] = useState(camping.checkIn);
-    const [outDate, setOutDate] = useState(camping.checkOut);
+    const [inDate, setInDate] = useState(checkIn);
+    const [outDate, setOutDate] = useState(checkOut);
     const [site, setSite] = useState(camping.website);
+
+
 
     const handleClick = ()=> {
         navigation('/');
@@ -69,11 +73,6 @@ function Edit() {
             return trip;
         })
         setCampingTrips(updatedTrips);
-
-        console.log("updated trips");
-        console.log(updatedTrips);
-        console.log(campingTrips);
-
         // navigation('/', {state: updatedTrips});
     }
 

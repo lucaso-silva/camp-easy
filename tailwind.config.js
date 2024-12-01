@@ -9,7 +9,9 @@ export default {
       backgroundImage: {
         'bonfire': "url('/bonfire.svg')",
         'banner-img': "url('/banner_img.jpg')",
-        'search': "url('/search.svg')"
+        'search': "url('/search.svg')",
+        'sunrise': "url('/sunrise_icon.svg')",
+        'sunset': "url('/sunset_icon.svg')",
       },
       fontFamily: {
         mainFont: ['"Protest Strike"', "sans-serif"],

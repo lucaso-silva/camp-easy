@@ -18,6 +18,9 @@ function TripInfoCard({ campingTrip, deleteTrip }) {
         }
     }
 
+    const checkIn = campingTrip.checkIn.substring(0, campingTrip.checkIn.indexOf('T'));
+    const checkOut = campingTrip.checkOut.substring(0, campingTrip.checkOut.indexOf('T'));
+
     return (
         <div
             className="font-normal md:text-lg p-5 bg-green-500 dark:bg-green-700 text-green-950 dark:text-green-50 tracking-wide w-full rounded-xl mx-auto border-2 border-black grid grid-rows-4">
@@ -34,8 +37,8 @@ function TripInfoCard({ campingTrip, deleteTrip }) {
                 <span className={iconStyle} onClick={handleClick} id="more">read_more</span>
             </div>
             <div className="flex gap-6 md:gap-32">
-                <p className={textStyle}>Check-in: <span className="font-secondFont">{campingTrip.checkIn}</span></p>
-                <p className={textStyle}>Check-out: <span className="font-secondFont">{campingTrip.checkOut}</span></p>
+                <p className={textStyle}>Check-in: <span className="font-secondFont">{checkIn}</span></p>
+                <p className={textStyle}>Check-out: <span className="font-secondFont">{checkOut}</span></p>
             </div>
         </div>
     )

@@ -1,35 +1,35 @@
-import axios from 'axios';
-import DailyForecast from "./DailyForecast.jsx";
+import DailyForecastCard from "./DailyForecastCard.jsx";
 import {useEffect, useState} from "react";
 
 function ForecastContainer(props) {
-    const [ currentTemp, setCurrentTemp ] = useState(null);
-    const [dailyForecast, setDailyForecast ] = useState(null);
-    // console.log(props.lat, props.long);
+    const [days, setDays] = useState([]);
 
-    useEffect(() => {
-        //NEED TO USE LAT AND LONG : PROPS
-        const forecast = axios.get('http://localhost:5001/forecast').then((res) => {
-            const data = res.data;
-            const { current, daily } = data;
-            const { temperature_2m } = current;
+    useEffect(()=> {
+        const dailyForecast = props.dailyForecast;
+        const { sunrise, sunset, temperature_2m_max, temperature_2m_min, time } = dailyForecast;
 
-            // console.log(temperature_2m);
-            // console.log(daily);
-            setCurrentTemp(temperature_2m)
-            setDailyForecast(daily);
-        });
-    }, []);
+        for(let i=0; i<time.length; i++) {
+            const newDay = {
+                date: time[i],
+                sunrise: sunrise[i].substring(sunrise[i].indexOf('T')+1),
+                sunset: sunset[i].substring(sunset[i].indexOf('T')+1),
+                max_temp: temperature_2m_max[i],
+                min_temp: temperature_2m_min[i]
+            }
+
+            setDays(prevDays => [...prevDays, newDay]);
+        }
+
+    }, [])
 
     return (
         <>
-            <div className="flex justify-between p-1">
-                <h3>Forecast</h3>
-                <span>Current temp: {currentTemp}°C</span>
+            <div className="flex justify-between p-1 items-center">
+                <h3 className="text-2xl text-green-950 dark:text-green-300 drop-shadow-light dark:drop-shadow-dark">Forecast</h3>
+                <span className="text-xl text-green-950 dark:text-green-300 drop-shadow-light dark:drop-shadow-dark">Current temp: {props.currentTemp}°C</span>
             </div>
-            <div className="p-2 border-2 border-black rounded-xl">
-                {/*{dailyForecast.map((day) => <DailyForecast day={day} />)}*/}
-                {/*<DailyForecast dailyForecast={dailyForecast}/>*/}
+            <div className="flex flex-col gap-4 md:flex-row md:gap-2">
+                { days.map((day) => <DailyForecastCard info={day} />)}
             </div>
         </>
     )

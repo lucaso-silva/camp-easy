@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 function TripDetails() {
-    const [ currentTemp, setCurrentTemp ] = useState(null);
+    const [ currentTemp, setCurrentTemp ] = useState({temp:null, isDay: null, weather_code: null});
     const [dailyForecast, setDailyForecast ] = useState(null);
 
     const navigation = useNavigate();
@@ -37,10 +37,11 @@ function TripDetails() {
         })
             .then(res => {
                 const data = res.data
+                // console.log(data);
                 const { current, daily } = data;
-                const { temperature_2m } = current;
+                const { temperature_2m, is_day, weather_code } = current;
 
-                setCurrentTemp(temperature_2m);
+                setCurrentTemp({ temp: temperature_2m, isDay: is_day, weather_code: weather_code });
                 setDailyForecast(daily);
 
             })

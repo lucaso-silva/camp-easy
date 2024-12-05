@@ -66,7 +66,7 @@ function Home(props) {
                     <input type="search" id="filter" onChange={filterTrips} className="bg-green-200 rounded-lg bg-search bg-no-repeat bg-left py-1 pl-7 font-secondFont font-thin border-green-950 border-2 w-3/5"/>
                 </div>
                 {/*{ campingTrips ? tripInfoCard() : "" }*/}
-                {campingTrips.length !== 0 ?
+                {campingTrips.length ?
                     campingTrips.map(trip => <TripInfoCard campingTrip={trip} key={trip.id} deleteTrip={deleteTrip}/>) :
                     (
                         <div className="h-80 text-center py-10">
